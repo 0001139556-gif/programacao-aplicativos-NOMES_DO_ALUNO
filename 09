@@ -1,0 +1,312 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package atividade02_amanda;
+
+ import java.util.Scanner;
+ import java.lang.Math;
+
+
+ *
+ * @author Aluno
+ */
+//questão1 
+package leituradoRaio;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+
+        double raio, area, circunferencia;
+        System.out.print("Digite o raio do círculo: ");
+        raio = entrada.nextDouble();
+
+        area = Math.PI * Math.pow(raio, 2);
+        circunferencia = 2 * Math.PI * raio;
+
+        System.out.printf("Área do círculo: %.2f\n", area);
+        System.out.printf("Circunferência do círculo: %.2f\n", circunferencia);
+
+        entrada.close();
+    }
+}
+
+
+//questão 2
+public class Main {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+        
+         double peso, altura, imc;
+         
+         System.out.print("Digite o peso (em kg): ");
+        peso = entrada.nextDouble();
+
+        System.out.print("Digite a altura (em metros): ");
+        altura = entrada.nextDouble();
+        
+        imc = peso / Math.pow(altura, 2);
+        
+          System.out.printf("Seu IMC é: %.2f\n", imc);
+
+        entrada.close();
+    }
+}
+//questão 3 
+package nome;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+
+        double cateto1, cateto2, hipotenusa;
+
+        System.out.print("Digite o comprimento do primeiro cateto: ");
+        cateto1 = entrada.nextDouble();
+
+        System.out.print("Digite o comprimento do segundo cateto: ");
+        cateto2 = entrada.nextDouble();
+
+        hipotenusa = Math.sqrt(Math.pow(cateto1, 2) + Math.pow(cateto2, 2));
+
+        System.out.printf("A hipotenusa é: %.2f\n", hipotenusa);
+
+        entrada.close();
+    }
+}
+
+//qustão 4
+
+
+//questão 5
+  public class Main {
+    public static void main(String[] args) {
+
+        Scanner entrada = new Scanner(System.in);
+
+        double n1, n2, n3;
+        double media, soma, maiorDif;
+        System.out.print("Digite o primeiro número: ");
+        n1 = entrada.nextDouble();
+        System.out.print("Digite o segundo número: ");
+        n2 = entrada.nextDouble();
+        System.out.print("Digite o terceiro número: ");
+        n3 = entrada.nextDouble();
+
+        soma = n1 + n2 + n3;
+        media = soma / 3;
+
+
+        double dif1 = Math.abs(n1 - n2);
+        double dif2 = Math.abs(n1 - n3);
+        double dif3 = Math.abs(n2 - n3);
+
+        maiorDif = Math.max(dif1, Math.max(dif2, dif3));
+
+
+        System.out.println("Soma: " + soma);
+        System.out.println("Média: " + media);
+        System.out.println("Maior diferença: " + maiorDif);
+
+        entrada.close();
+    }
+}
+package nome;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+
+        int n;
+        int valor, soma = 0, menor = Integer.MAX_VALUE, maior = Integer.MIN_VALUE;
+
+        System.out.print("Digite a quantidade de rolagens: ");
+        n = entrada.nextInt();
+
+        if (n <= 0) {
+            System.out.println("A quantidade de rolagens deve ser maior que 0.");
+        } else {
+            for (int i = 1; i <= n; i++) {
+                System.out.print("Digite o resultado da rolagem " + i + " (entre 1 e 6): ");
+                valor = entrada.nextInt();
+
+                while (valor < 1 || valor > 6) {
+                    System.out.print("Valor inválido! Digite um número entre 1 e 6: ");
+                    valor = entrada.nextInt();
+                }
+
+                soma += valor;
+
+                if (valor < menor) {
+                    menor = valor;
+                }
+                if (valor > maior) {
+                    maior = valor;
+                }
+            }
+
+            double media = (double) soma / n;
+
+            System.out.printf("\nMédia dos resultados: %.2f\n", media);
+            System.out.println("Menor valor obtido: " + menor);
+            System.out.println("Maior valor obtido: " + maior);
+        }
+
+        entrada.close();
+    }
+}
+
+
+
+
+//questão 6
+
+public class angulotrigonometria {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+
+        double graus, rad, sen, cos, tan;
+
+        System.out.print("Digite o ângulo em graus: ");
+        graus = entrada.nextDouble();
+
+        rad = Math.toRadians(graus);
+
+        sen = Math.sin(rad);
+        cos = Math.cos(rad);
+
+
+//questão 7
+package distanciaentre2pontos; 
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+      double x1, y1, x2, y2, distancia;
+
+
+        System.out.print("Digite x1: ");
+        x1 = entrada.nextDouble();
+
+        System.out.print("Digite y1: ");
+        y1 = entrada.nextDouble();++++++
+
+        System.out.print("Digite x2: ");
+        x2 = entrada.nextDouble();
+
+        System.out.print("Digite y2: ");
+        y2 = entrada.nextDouble();
+
+
+        distancia = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
+
+        System.out.printf("A distância euclidiana entre os pontos é: %.2f\n", distancia);
+
+        entrada.close();
+    }
+}
+
+
+//questão 8
+package nome;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+
+        double n1, n2, n3;
+        double media, somaAbs, maiorDif;
+
+        System.out.print("Digite o primeiro número: ");
+        n1 = entrada.nextDouble();
+
+        System.out.print("Digite o segundo número: ");
+        n2 = entrada.nextDouble();
+
+        System.out.print("Digite o terceiro número: ");
+        n3 = entrada.nextDouble();
+
+        media = (n1 + n2 + n3) / 3;
+        somaAbs = Math.abs(n1) + Math.abs(n2) + Math.abs(n3);
+
+        double dif1 = Math.abs(n1 - n2);
+        double dif2 = Math.abs(n1 - n3);
+        double dif3 = Math.abs(n2 - n3);
+
+        maiorDif = Math.max(dif1, Math.max(dif2, dif3));
+
+        System.out.printf("\nMédia aritmética: %.2f\n", media);
+        System.out.printf("Soma dos valores absolutos: %.2f\n", somaAbs);
+        System.out.printf("Maior diferença (valor absoluto): %.2f\n", maiorDif);
+
+        entrada.close();
+    }
+}
+ // questão 9
+package equacaode2grau;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+
+        double a, b, c;
+        double delta, x1, x2;
+
+        System.out.print("Digite o valor de a: ");
+        a = entrada.nextDouble();
+        System.out.print("Digite o valor de b: ");
+        b = entrada.nextDouble();
+        System.out.print("Digite o valor de c: ");
+        c = entrada.nextDouble();
+
+        if (a == 0) {
+            System.out.println("Não é uma equação do segundo grau (a não pode ser 0).");
+        } else {
+            delta = Math.pow(b, 2) - 4 * a * c;
+            if (delta < 0) {
+                System.out.println("A equação não possui raízes reais.");
+            } else {
+                x1 = (-b + Math.sqrt(delta)) / (2 * a);
+                x2 = (-b - Math.sqrt(delta)) / (2 * a);
+                System.out.printf("x1 = %.2f\n", x1);
+                System.out.printf("x2 = %.2f\n", x2);
+            }
+        }
+        entrada.close();
+    }
+}
+//Questão 10 
+package algoritmodetemperatura ;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+
+        double fahrenheit, celsius;
+
+        System.out.print("Digite a temperatura em Fahrenheit: ");
+        fahrenheit = entrada.nextDouble();
+
+        celsius = (5.0 / 9.0) * (fahrenheit - 32);
+
+        System.out.printf("Temperatura em Fahrenheit: %.2f°F\n", fahrenheit);
+        System.out.printf("Temperatura em Celsius: %.2f°C\n", celsius);
+        entrada.close();
+    }
+}
