@@ -1,0 +1,756 @@
+// MAIN
+
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package amanda_9;
+import java.util.Scanner;
+/**
+ *
+ * @author amanda_9
+ */
+public class natalia_rogerio_9 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+        Contato contato = new Contato();
+        AgendaEletronica agenda = new AgendaEletronica();
+        int opcao;
+        
+        do{
+            System.out.println("=== AGENDA ELETRÔNICA ===");
+            System.out.println("1) Cadastrar contato.");
+            System.out.println("2) Consultar agenda.");
+            System.out.println("3) Editar contato.");
+            System.out.println("4) Excluir contato.");
+            System.out.println("5) Sair. \n");
+            System.out.println("Digite a opção desejada: ");
+            opcao=entrada.nextInt();
+            entrada.nextLine();
+            switch(opcao){
+                case 1 -> {
+                    contato.cadastrar();
+                    agenda.salvarContato(contato);
+                }
+                case 2 -> agenda.ConsultarAgenda();
+                case 3 -> agenda.EditarContato();
+                case 4 -> agenda.ExcluirContato();
+                case 5 -> System.out.println("Encerrando o sistema!");
+                default -> System.out.println("Opção invalida!");
+                
+            }
+            
+        }while(opcao!=5);
+        
+    }
+    
+}
+
+
+
+// Classe contato
+public class Contato {
+    
+    private String nome;
+    private String telefone;
+    private String email;
+    
+    
+    
+    public String getNome(){
+        return nome;
+    }
+    
+    public void setNome(String nome){
+        this.nome = nome;
+    }
+    
+    public String getTelefone(){
+        return telefone;
+    }
+    
+    public void setTelefone(String telefone){
+        this.telefone = telefone;
+    }
+    
+    public String getEmail(){
+        return email;
+    }
+    
+    public void setEmail(String email){
+        this.email = email;
+    }
+    
+    public void cadastrar(){
+        Scanner entrada = new Scanner(System.in);
+        
+        String regexEmail = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
+        Pattern patternEmail = Pattern.compile(regexEmail);
+        
+        System.out.println("[CADASTRAR CONTATO]");
+        do{
+            System.out.println("Digite o nome: ");
+            nome = entrada.nextLine();
+            if (nome.length() == 0){
+                System.out.println("O nome não pode estar vazio!");
+            }
+        }while(nome.length() == 0);
+        boolean fone = true;
+        do{
+            System.out.println("Digite o telefone (00.00000-0000): ");
+            telefone = entrada.nextLine();
+            if(telefone.length()!=11){
+                System.out.println("Digite exatamente 11 digitos!");
+                fone = false;
+                continue;
+            }
+            fone = true;
+            for(int i = 0; i<telefone.length(); i++){
+                char c = telefone.charAt(i);
+                if(!Character.isDigit(c)){
+                    System.out.println("Digite apenas numeros de (0 - 9).");
+                    fone = false;
+                    break;
+                }
+            }
+        }while(!fone);
+        boolean emailVal = true;
+        do{
+            System.out.println("Digite o email: ");
+            email = entrada.nextLine();
+            Matcher matcherEmail = patternEmail.matcher(email);
+            if(!matcherEmail.matches()){
+                System.out.println("Digite um email valido! \nexemplo@dominio.com");
+                emailVal = true;
+            }
+            else{
+                emailVal = false;
+            }
+        }while(emailVal== true);
+        System.out.println("Contato cadastrado com sucesso!");
+    }
+    
+}
+
+//agenda eletrônica 
+
+public class AgendaEletronica {
+    
+    private String [][] agenda = new String[1000][3];
+    
+    
+    public boolean salvarContato(Contato contato){
+        String email = contato.getEmail();
+        String nome = contato.getNome();
+        String telefone = contato.getTelefone();
+        
+        try{
+            for(int i=0; i<agenda.length; i++){
+                if(agenda[i][0]==null){
+                    agenda[i][0]=nome;
+                    agenda[i][1]=telefone;
+                    agenda[i][2]=email;
+                    System.out.println("Contato salvo!");
+                    return true;
+                }
+            }
+            System.out.println("Erro: Agenda cheia. ");
+            return false;
+        }catch(Exception e){
+            System.out.println("Erro ao salvar o contato: "+e.getMessage());
+            return false;
+        }
+    }
+    
+    public void ConsultarAgenda(){
+        Scanner entrada = new Scanner(System.in);
+        int opcao;
+        List<String[]> contatos = new ArrayList<>();
+        
+        for (String[] contato : agenda) {
+        if (contato[0] != null) {
+            contatos.add(contato);
+        }
+        }
+        if (contatos.isEmpty()) {
+        System.out.println("Agenda vazia.");
+        return;
+        }
+        
+        
+        do{
+            System.out.println("[CONSULTAR AGENDA]");
+            System.out.println("Odenar por: \n1 - NOME | 2 - TELEFONE | 3 - E-MAIL");
+            opcao = entrada.nextInt();
+            entrada.nextLine();
+            if(opcao<1 || opcao>3){
+                System.out.println("Opcao invalida! \nDigite 1, 2 ou 3.");
+            }
+        }while(opcao<1 || opcao>3);
+    
+        int coluna = opcao - 1; 
+        contatos.sort(Comparator.comparing(c -> c[coluna].toLowerCase()));
+        
+        System.out.println("\n=== CONTATOS ORDENADOS ===");
+        for (String[] c : contatos) {
+        System.out.println("Nome: " + c[0]);
+        System.out.println("Telefone: " + c[1]);
+        System.out.println("Email: " + c[2]);
+        System.out.println("--------------------------");
+    }
+        
+        
+    }
+    
+    public void EditarContato(){
+        Scanner entrada = new Scanner(System.in);
+        String regexEmail = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
+        Pattern patternEmail = Pattern.compile(regexEmail);
+        
+        String nome, telefone, novoTelefone, email;
+        
+        System.out.println("[EDITAR CONTATO]");
+        
+        boolean fone;
+        do{
+            System.out.println("Informe o telefone (chave unica) do contato: ");
+            telefone = entrada.nextLine();
+            
+            if(telefone.length()!=11){
+                System.out.println("Digite exatamente 11 digitos!");
+                fone = false;
+                continue;
+            }
+            fone = true;
+            
+            for(int i = 0; i<telefone.length(); i++){
+                char c = telefone.charAt(i);
+                if(!Character.isDigit(c)){
+                    System.out.println("Digite apenas numeros de (0 - 9).");
+                    fone = false;
+                    break;
+                }
+            }
+        }while(!fone);
+        
+        boolean encontrado = false;
+        
+        for (int i=0; i<agenda.length; i++){
+            if (telefone.equals(agenda[i][1])){
+                encontrado = true;
+                
+                System.out.println("Novo nome (Enter para manter): ");
+                nome = entrada.nextLine();
+                if(nome.length()>0){
+                    agenda[i][0]=nome;
+                }
+                
+                
+                do{
+                    
+                System.out.println("Novo telefone (Enter para manter): ");
+                novoTelefone = entrada.nextLine();
+                
+                if(novoTelefone.length()>0){
+                    if(telefone.length()!=11){
+                        System.out.println("Digite exatamente 11 digitos!");
+                        fone = false;
+                        continue;
+                    }
+                    
+                    fone = true;
+                    for(int j = 0; j<novoTelefone.length(); j++){
+                        char c = telefone.charAt(i);
+                        if(!Character.isDigit(c)){
+                            System.out.println("Digite apenas numeros de (0 - 9).");
+                            fone = false;
+                            break;
+                        }
+                        
+                    }
+                    if(fone){
+                        agenda[i][1]=novoTelefone;
+                    }
+                }
+                }while(!fone);
+                
+                boolean emailVal = true;
+                do{
+                    System.out.println("Novo email(Enter para manter): ");
+                    email = entrada.nextLine();
+                    
+                    if(email.length()>0){
+                        Matcher matcherEmail = patternEmail.matcher(email);
+                        if(!matcherEmail.matches()){
+                            System.out.println("Digite um email valido! \nexemplo@dominio.com");
+                            emailVal = true;
+                        }
+                        else{
+                            agenda[i][2]=email;
+                            emailVal = false;
+                    }
+                    }
+                }while(emailVal== true);
+            }
+            }System.out.println("Contato atualizado com sucesso!");
+            
+        }
+    
+    
+        public void ExcluirContato(){
+            Scanner entrada = new Scanner(System.in);
+            String telefone;
+            
+            boolean fone = true;
+            do{
+            System.out.println("Informe o telefone (chave unica) do contato: ");
+            telefone = entrada.nextLine();
+            
+            if(telefone.length()!=11){
+                System.out.println("Digite exatamente 11 digitos!");
+                fone = false;
+                continue;
+            }
+            fone = true;
+            
+            for(int i = 0; i<telefone.length(); i++){
+                char c = telefone.charAt(i);
+                if(!Character.isDigit(c)){
+                    System.out.println("Digite apenas numeros de (0 - 9).");
+                    fone = false;
+                    break;
+                }
+            }
+        }while(!fone);
+            
+            System.out.print("Confirmar exclusão? (s/n): ");
+            String resposta = entrada.nextLine().toLowerCase();
+            
+            if (resposta.equals("s")) {
+                boolean encontrado = false;
+                
+                for (int i = 0; i < agenda.length; i++) {
+                    
+                    if (telefone.equals(agenda[i][1])) {
+                        
+                        for (int j = i; j < agenda.length - 1; j++) {
+                            agenda[j][0] = agenda[j + 1][0];
+                            agenda[j][1] = agenda[j + 1][1];
+                            agenda[j][2] = agenda[j + 1][2];
+                        }
+                        agenda[agenda.length - 1][0] = null;
+                        agenda[agenda.length - 1][1] = null;
+                        agenda[agenda.length - 1][2] = null;
+                        
+                        encontrado = true;
+                        
+                        System.out.println("Contato excluído com sucesso!");
+                        break;
+                    }
+                }
+                if (!encontrado) {
+                    System.out.println("Contato com telefone " + telefone + " não encontrado.");
+                }
+            } else {
+                System.out.println("Exclusão cancelada.");
+            }
+        }
+    
+    
+    }
+package sistemaintegrado;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class SistemaIntegrado {
+    
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Biblioteca biblioteca = new Biblioteca();
+        GerenciadorTarefas tarefas = new GerenciadorTarefas();
+        SistemaNotas notas = new SistemaNotas();
+
+        int opcao;
+
+        do {
+            System.out.println("\n==== MENU PRINCIPAL ====");
+            System.out.println("1 - Biblioteca de Livros");
+            System.out.println("2 - Gerenciador de Tarefas");
+            System.out.println("3 - Sistema de Notas");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcao) {
+                case 1 -> biblioteca.menu();
+                case 2 -> tarefas.menu();
+                case 3 -> notas.menu();
+                case 0 -> System.out.println("Encerrando o sistema...");
+                default -> System.out.println("Opção inválida! Tente novamente.");
+            }
+
+        } while (opcao != 0);
+    }
+}
+// 2 - biblioteca
+class Livro {
+    String titulo;
+    String autor;
+    boolean emprestado;
+
+    public Livro(String titulo, String autor) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.emprestado = false;
+    }
+}
+
+class Biblioteca {
+    private final ArrayList<Livro> livros = new ArrayList<>();
+    private final Scanner sc = new Scanner(System.in);
+
+    public void menu() {
+        int opcao;
+        do {
+            System.out.println("\n--- Biblioteca de Livros ---");
+            System.out.println("1 - Consultar acervo");
+            System.out.println("2 - Emprestar Livro");
+            System.out.println("3 - Sair ");
+            opcao = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcao) {
+                case 1 -> consultaracervo();
+                case 2 -> emprestarLivro();
+                case 3 -> System.out.println("Voltando ao menu principal...");
+                default -> System.out.println("Opção inválida!");
+            }
+        } while (opcao != 0);
+    }
+
+    private void () {
+        if (livros.isEmpty()) {
+            System.out.println("Nenhum livro cadastrado.");
+            return;
+        }
+        System.out.println("\nAcervo de Livros:");
+        for (int i = 0; i < livros.size(); i++) {
+            Livro l = livros.get(i);
+            System.out.println((i + 1) + ". " + l.titulo + " - " + l.autor +
+                    (l.emprestado ? " (Emprestado)" : " (Disponível)"));
+        }
+    }
+
+    private void emprestarLivro() {
+        listarLivros();
+        if (livros.isEmpty()) return;
+
+        System.out.print("Número do livro para emprestar: ");
+        int num = sc.nextInt() - 1;
+
+        if (num >= 0 && num < livros.size()) {
+            Livro l = livros.get(num);
+            if (!l.emprestado) {
+                l.emprestado = true;
+                System.out.println("Livro emprestado com sucesso!");
+            } else {
+                System.out.println("Esse livro já está emprestado!");
+            }
+        } else {
+            System.out.println("Número inválido!");
+        }
+    }
+}
+
+// 3 - gerenciador de tarefas 
+
+class Tarefa {
+    String descricao;
+    boolean concluida;
+
+    public Tarefa(String descricao) {
+        this.descricao = descricao;
+        this.concluida = false;
+    }
+}
+
+class GerenciadorTarefas {
+    private final ArrayList<Tarefa> lista = new ArrayList<>();
+    private final Scanner sc = new Scanner(System.in);
+
+    public void menu() {
+        int opcao;
+        do {
+            System.out.println("\n--- Gerenciador de Tarefas ---");
+            System.out.println("1 - Adicionar Tarefa");
+            System.out.println("2 - Concluir Tarefas");
+            System.out.println("3 - Listar Tarefa");
+            System.out.println("4 - Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcao) {
+                case 1 -> adicionarTarefa();
+                case 2 -> concluirTarefa();
+                case 3 -> listarTarefas();
+                case 4 -> System.out.println("saindo...");
+                default -> System.out.println("Opção inválida!");
+            }
+        } while (opcao != 0);
+    }
+
+    private void adicionarTarefa() {
+        System.out.print("Descrição da tarefa: ");
+        String desc = sc.nextLine();
+        lista.add(new Tarefa(desc));
+        System.out.println("Tarefa adicionada com sucesso!");
+    }
+
+    private void listarTarefas() {
+        if (lista.isEmpty()) {
+            System.out.println("Nenhuma tarefa cadastrada.");
+            return;
+        }
+        System.out.println("\nLista de Tarefas:");
+        for (int i = 0; i < lista.size(); i++) {
+            Tarefa t = lista.get(i);
+            System.out.println((i + 1) + ". " + t.descricao +
+                    (t.concluida ? " ( Concluída)" : " (Pendente)"));
+        }
+    }
+
+    private void concluirTarefa() {
+        listarTarefas();
+        if (lista.isEmpty()) return;
+
+        System.out.print("Número da tarefa a concluir: ");
+        int num = sc.nextInt() - 1;
+
+        if (num >= 0 && num < lista.size()) {
+            lista.get(num).concluida = true;
+            System.out.println("Tarefa concluída!");
+        } else {
+            System.out.println("Número inválido!");
+        }
+    }
+}
+ // 4 - sistema de nota dos alunos
+    public static class Aluno {
+
+        private String codigo;
+        private String nome;
+        private double notaFinal;
+        private String situacao;
+
+        public Aluno(String codigo, String nome) {
+            this.codigo = codigo;
+            this.nome = nome;
+            this.notaFinal = 0.0;
+            this.situacao = "Sem notas";
+        }
+
+        public String getCodigo() {
+            return codigo;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public double getNotaFinal() {
+            return notaFinal;
+        }
+
+        public String getSituacao() {
+            return situacao;
+        }
+
+        public void setNotaFinal(double notaFinal) {
+            this.notaFinal = notaFinal;
+            definirSituacao();
+        }
+
+        private void definirSituacao() {
+            if (notaFinal < 45)
+                situacao = "Reprovado";
+            else if (notaFinal < 60)
+                situacao = "Recuperação";
+            else
+                situacao = "Aprovado";
+        }
+    }
+    
+    public static class Avaliacao {
+        private String nome;
+        private double pontuacaoMaxima;
+
+        public Avaliacao(String nome, double pontuacaoMaxima) {
+            this.nome = nome;
+            this.pontuacaoMaxima = pontuacaoMaxima;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public double getPontuacaoMaxima() {
+            return pontuacaoMaxima;
+        }
+    }
+
+    public static class SistemaNotas {
+
+        private List<Avaliacao> avaliacoes = new ArrayList<>();
+        private List<Aluno> alunos = new ArrayList<>();
+        private Map<String, Map<String, Double>> notas = new HashMap<>();
+
+        public SistemaNotas() {
+            alunos.add(new Aluno("0101", "Natalia Teixeira"));
+            alunos.add(new Aluno("0102", "Rogerio Maia"));
+            alunos.add(new Aluno("0103", "Juliana De Sousa "));
+            alunos.add(new Aluno("0104", "Diogo Felipe"));
+            alunos.add(new Aluno("0105", "Givanildo Martins"));
+            alunos.add(new Aluno("0106", "Ana Braga"));
+            alunos.add(new Aluno("0107", "Geovanna Costa"));
+            alunos.add(new Aluno("0108", "Amanda Silva"));
+            alunos.add(new Aluno("0109", "Allana Lis"));
+            alunos.add(new Aluno("0110", "Eduardo Amorim"));
+        }
+
+        public void definirAvaliacoes(Scanner sc) {
+            while (true) {
+                avaliacoes.clear();
+                System.out.print("Quantas avaliações? ");
+                int qtd = sc.nextInt();
+                sc.nextLine();
+
+                double total = 0;
+                for (int i = 1; i <= qtd; i++) {
+                    System.out.print("Nome da avaliação " + i + ": ");
+                    String nome = sc.nextLine().trim();
+                    System.out.print("Pontuação máxima (ex: 20): ");
+                    double pontos = sc.nextDouble();
+                    sc.nextLine();
+
+                    total += pontos;
+                    avaliacoes.add(new Avaliacao(nome, pontos));
+                }
+
+                if (total > 100) {
+                    System.out.println("Total ultrapassa 100 pontos (" + total + "). Corrija!");
+                } else if (total < 100) {
+                    System.out.println("Total e menor que 100 pontos (" + total + "). Corrija!");
+                } else {
+                    System.out.println("Esquema salvo com sucesso. Total definido: " + total + " pontos.");
+                    break;
+                }
+            }
+        }
+
+        public void lancarNotas(Scanner sc) {
+            if (avaliacoes.isEmpty()) {
+                System.out.println("Nenhuma avaliação definida!");
+                return;
+            }
+
+            for (Aluno a : alunos) {
+                System.out.println("\nAluno " + a.getCodigo() + " | " + a.getNome());
+                Map<String, Double> notasAluno = new HashMap<>();
+
+                for (Avaliacao av : avaliacoes) {
+                    double nota;
+                    do {
+                        System.out.print(av.getNome() + " (0–" + av.getPontuacaoMaxima() + "): ");
+                        while (!sc.hasNextDouble()) {
+                            System.out.print("Entrada inválida. Digite um número: ");
+                            sc.next();
+                        }
+                        nota = sc.nextDouble();
+                        sc.nextLine();
+
+                        if (nota < 0 || nota > av.getPontuacaoMaxima()) {
+                            System.out.println("️ Erro! Valor fora do limite permitido!");
+                        }
+                    } while (nota < 0 || nota > av.getPontuacaoMaxima());
+
+                    notasAluno.put(av.getNome(), nota);
+                }
+
+                notas.put(a.getCodigo(), notasAluno);
+                System.out.println("Notas salvas!");
+            }
+        }
+        
+        public void gerarBoletim() {
+            if (notas.isEmpty()) {
+                System.out.println("Nenhuma nota lançada");
+                return;
+            }
+
+            System.out.println("\n----------------------------------------------");
+            System.out.println("codigo | nome | nota_final | situação");
+
+            for (Aluno a : alunos) {
+                Map<String, Double> notasAluno = notas.get(a.getCodigo());
+                if (notasAluno == null) continue;
+
+                double total = 0;
+                for (Avaliacao av : avaliacoes) {
+                    total += notasAluno.getOrDefault(av.getNome(), 0.0);
+                }
+
+                a.setNotaFinal(total);
+                System.out.printf("%s | %-28s | %10.2f | %s%n",
+                        a.getCodigo(), a.getNome(), a.getNotaFinal(), a.getSituacao());
+            }
+        }
+    }*/    
+
+public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);        
+
+   SistemaNotas sistema = new SistemaNotas();
+        int opcao = 0;
+        boolean valido;
+
+        do {
+            System.out.println("\n=== SISTEMA DE NOTAS ===");
+            System.out.println("1 - Definir avaliações");
+            System.out.println("2 - Lançar notas");
+            System.out.println("3 - Gerar boletim");
+            System.out.println("4 - Sair");
+
+            valido = false;
+
+            while (!valido) {
+                try {
+                    System.out.print("Opção: ");
+                    opcao = entrada.nextInt();
+                    entrada.nextLine();
+                    valido = true;
+                } catch (InputMismatchException e) {
+                    System.out.println("️Inválida! Digite um número inteiro.");
+                    entrada.nextLine();
+                }
+            }
+
+            switch (opcao) {
+                case 1 -> sistema.definirAvaliacoes(entrada);
+                case 2 -> sistema.lancarNotas(entrada);
+                case 3 -> sistema.gerarBoletim();
+                case 4 -> System.out.println("Saindo...");
+                default -> System.out.println("Opção inválida!");
+            }
+
+        } while (opcao != 4);*/
+    }
+}
